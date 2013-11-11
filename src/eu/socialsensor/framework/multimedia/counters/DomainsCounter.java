@@ -10,7 +10,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MapReduceCommand;
 import com.mongodb.MapReduceCommand.OutputType;
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 
 public class DomainsCounter extends TimerTask {
 
@@ -18,7 +18,7 @@ public class DomainsCounter extends TimerTask {
 	private OutputType outputType;
 
 	private MapReduceCommand mr_cmd;
-	private String output;
+	//private String output;
 
 	private static String map = "function() { " +
 			"   var domain = this.url.match(/:\\/\\/(.[^/]+)/)[1]; " + 
@@ -36,9 +36,9 @@ public class DomainsCounter extends TimerTask {
         		"}";
 
 	public DomainsCounter(String host, String dbname, String collectionName, String output) throws Exception {
-		Mongo mongo = null;
+		MongoClient mongo = null;
 		try {
-			mongo = new Mongo(host, 27017);
+			mongo = new MongoClient(host, 27017);
 		} catch (UnknownHostException e) {
 			throw new Exception(e);
 		}
@@ -50,7 +50,7 @@ public class DomainsCounter extends TimerTask {
 		DBObject query = new BasicDBObject();
 		query.put("url", new BasicDBObject("$exists", Boolean.TRUE));
 				
-		this.output = output;
+		//this.output = output;
 		this.mr_cmd = new MapReduceCommand(collection, map, reduce, output, outputType, query);
 		
 	}

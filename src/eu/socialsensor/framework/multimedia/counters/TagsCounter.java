@@ -10,7 +10,6 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MapReduceCommand;
 import com.mongodb.MapReduceCommand.OutputType;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 
 public class TagsCounter extends TimerTask {
@@ -19,7 +18,7 @@ public class TagsCounter extends TimerTask {
 	private OutputType outputType;
 
 	private MapReduceCommand mr_cmd;
-	private String output;
+	//private String output;
 
 	private static String map = "function() { " +
         	"for (index in this.tags) { "
@@ -52,7 +51,7 @@ public class TagsCounter extends TimerTask {
 		DBObject query = new BasicDBObject();
 		query.put("tags", new BasicDBObject("$ne", new String[0]));
 				
-		this.output = output;
+		//this.output = output;
 		this.mr_cmd = new MapReduceCommand(collection, map, reduce, output, outputType, query);
 		
 	}

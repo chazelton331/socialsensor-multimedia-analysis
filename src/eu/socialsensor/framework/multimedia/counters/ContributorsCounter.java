@@ -10,7 +10,6 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MapReduceCommand;
 import com.mongodb.MapReduceCommand.OutputType;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 
 public class ContributorsCounter extends TimerTask {
@@ -19,7 +18,7 @@ public class ContributorsCounter extends TimerTask {
 	private OutputType outputType;
 
 	private MapReduceCommand mr_cmd;
-	private String output;
+	//private String output;
 
 	private static String map = "function() { " +
 			"   var k = {stream:this.streamId, author:this.author}; " + 
@@ -36,7 +35,7 @@ public class ContributorsCounter extends TimerTask {
         		"}";
 
 	public ContributorsCounter(String host, String dbname, String collectionName, String output) throws Exception {
-		Mongo mongo = null;
+		MongoClient mongo = null;
 		try {
 			mongo = new MongoClient(host, 27017);
 		} catch (UnknownHostException e) {
@@ -50,7 +49,7 @@ public class ContributorsCounter extends TimerTask {
 		DBObject query = new BasicDBObject();
 		query.put("author", new BasicDBObject("$exists", Boolean.TRUE));
 				
-		this.output = output;
+		//this.output = output;
 		this.mr_cmd = new MapReduceCommand(collection, map, reduce, output, outputType, query);
 		
 	}

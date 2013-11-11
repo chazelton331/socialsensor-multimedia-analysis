@@ -7,7 +7,6 @@ package eu.socialsensor.framework.multimedia.spatial.clustering;
  *
  *************************************************************************/
 
-import java.util.Arrays;
 import java.util.Comparator;
 
 public class Point2D implements Comparable<Point2D> {

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -24,8 +23,6 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import eu.socialsensor.framework.common.domain.MediaItem;
 import eu.socialsensor.framework.common.factories.ItemFactory;
-import eu.socialsensor.framework.client.dao.MediaItemDAO;
-import eu.socialsensor.framework.client.dao.impl.MediaItemDAOImpl;
 import eu.socialsensor.framework.client.search.visual.NearestImage;
 import eu.socialsensor.framework.client.search.visual.VisualIndexHandler;
 

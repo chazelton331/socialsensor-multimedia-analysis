@@ -6,10 +6,6 @@ import eu.socialsensor.framework.multimedia.counters.ContributorsCounter;
 import eu.socialsensor.framework.multimedia.counters.DomainsCounter;
 import eu.socialsensor.framework.multimedia.counters.ItemsCounter;
 import eu.socialsensor.framework.multimedia.counters.TagsCounter;
-import eu.socialsensor.framework.multimedia.spatial.clustering.BIRCHClusterer;
-import eu.socialsensor.framework.multimedia.visual.clustering.VisualClusterer;
-
-
 
 public class MultimediaAnalysis {
 
