@@ -22,7 +22,7 @@ public class ContributorsCounter extends TimerTask {
 	private String output;
 
 	private static String map = "function() { " +
-			"   var k = {stream:this.streamId, author:this.screenname}; " + 
+			"   var k = {stream:this.streamId, author:this.author}; " + 
         	"	emit(k, 1); " +
         	"}";
 	//"   var k = {stream:this.streamId, id:this.author_id, username:this.author}; " + 

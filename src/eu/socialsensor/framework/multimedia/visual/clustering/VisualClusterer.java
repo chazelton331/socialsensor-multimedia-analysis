@@ -208,15 +208,15 @@ public class VisualClusterer {
 	 */
 	public static void main(String[] args) throws UnknownHostException {
 		MongoClient m = new MongoClient("160.40.50.207");
-		DB database = m.getDB("mmdemo");
+		DB database = m.getDB("MMdemoStreams");
 		
 		DBCollection output = database.getCollection("visual_clusters");
 		DBCollection input = database.getCollection("MediaItems");
 		
 
-		HttpSolrServer solr = new HttpSolrServer("http://160.40.50.207:8080/solr-4.2.1/VisualDyscos");
+		HttpSolrServer solr = new HttpSolrServer("http://160.40.50.207:8080/solr/VisualDyscos2");
 		
-		VisualClusterer visualClusterer = new VisualClusterer("http://160.40.50.207:8080/socialsensorVisualIndex", "mmdemo");
+		VisualClusterer visualClusterer = new VisualClusterer("http://160.40.50.207:8080/VisualIndexService", "mmdemo");
 		while(true) {
 			
 			

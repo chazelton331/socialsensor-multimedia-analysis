@@ -22,9 +22,12 @@ public class TagsCounter extends TimerTask {
 	private String output;
 
 	private static String map = "function() { " +
-        	"for (index in this.tags) { " +
-        	"	emit(this.tags[index], 1); " +
-        	"}}";
+        	"for (index in this.tags) { "
+        	+ " var tag = this.tags[index]; "
+        	+ " var tmp = \"=\"; "
+        	+ " if(tag.length<20 && tag.indexOf(tmp) == -1) {" +
+        	"	emit(tag.toLowerCase(), 1); " +
+        	"}}}";
     
 	private static String reduce = "function(previous, current) { " + 
         		"var count = 0; " +

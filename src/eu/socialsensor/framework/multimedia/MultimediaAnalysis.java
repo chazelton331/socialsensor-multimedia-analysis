@@ -17,11 +17,11 @@ public class MultimediaAnalysis {
 	public static void main(String[] args) {
 		
 		String host = "160.40.50.207";
-		String db = "mmdemo";
+		String db = "MMdemoStreams";
 		String input = "MediaItems";
 		String output = "histogram";
 		
-		String solr_host = "http://160.40.50.207:8080/solr-4.2.1/";
+		//String solr_host = "http://160.40.50.207:8080/solr/";
 		
 		Timer timer = new Timer(); 
 

@@ -210,8 +210,8 @@ public class BIRCHClusterer extends TimerTask {
 		Timer timer = new Timer(); 
 		try {
 			timer.schedule(new BIRCHClusterer(
-					"160.40.50.207", "mmdemo", "MediaItems", 
-					"http://160.40.50.207:8080/solr-4.2.1/Hotspots"), (long)100, (long)15*60000);
+					"160.40.50.207", "MMdemoStreams", "MediaItems", 
+					"http://160.40.50.207:8080/solr/Hotspots2"), (long)100, (long)15*60000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
