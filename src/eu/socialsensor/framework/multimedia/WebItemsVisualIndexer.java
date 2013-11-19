@@ -68,13 +68,16 @@ public class WebItemsVisualIndexer implements Runnable {
 	public void run() {
 		while(true) {
 			
+			
+			
 			DBObject query = new BasicDBObject();
 			query.put("indexed", false);
 			query.put("status", "new");
 			query.put("type", "image");
-		
+			query.put("streamId", "Twitter");
+			
 			System.out.print("Find: " + query);
-			DBCursor items = input_collection.find(query).sort(new BasicDBObject("url", -1)).skip(100);
+			DBCursor items = input_collection.find(query).sort(new BasicDBObject("url", 1));
 			System.out.println(" ... DONE");
 			
 			int size = items.size();
@@ -162,6 +165,12 @@ public class WebItemsVisualIndexer implements Runnable {
 		@Override
 		public void run() {
 			while(true) {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e2) {
+					e2.printStackTrace();
+				}
+				
 				DBObject item;
 				try {
 					item = queue.take();
