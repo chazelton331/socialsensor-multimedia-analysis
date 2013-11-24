@@ -18,7 +18,13 @@ import com.mongodb.MongoClient;
 import com.mongodb.Bytes;
 
 import eu.socialsensor.framework.client.search.visual.VisualIndexHandler;
-import eu.socialsensor.visual.vectorization.ImageVectorizer;
+import gr.iti.mklab.visual.aggregation.VladAggregatorMultipleVocabularies;
+import gr.iti.mklab.visual.dimreduction.PCA;
+import gr.iti.mklab.visual.extraction.AbstractFeatureExtractor;
+import gr.iti.mklab.visual.extraction.SURFExtractor;
+import gr.iti.mklab.visual.vectorization.ImageVectorization;
+import gr.iti.mklab.visual.vectorization.ImageVectorizationResult;
+
 
 public class WebItemsVisualIndexer implements Runnable {
 
@@ -27,11 +33,19 @@ public class WebItemsVisualIndexer implements Runnable {
 	private DBCollection input_collection;
 	
 	private VisualIndexHandler visualIndexHandler;
-	private String codebook;
-	private String pca;
-	private ImageVectorizer vectorizer;
+	private String learningFolder = "C:/Users/lef/Desktop/ITI/data/learning_files/best_files_4-11-2013/";
+	private String[] codebookFiles = { learningFolder + "surf_l2_128c_0.csv",
+			learningFolder + "surf_l2_128c_1.csv", learningFolder + "surf_l2_128c_2.csv",
+			learningFolder + "surf_l2_128c_3.csv" };
+	private String pcaFile = "";
+
 	private String indexCollection;
 	private ArrayBlockingQueue<DBObject> queue;
+	
+	private static int[] numCentroids = { 128, 128, 128, 128 };
+	private static int targetLengthMax = 1024;
+	
+	private static int maxNumPixels = 768 * 512; // use 1024*768 for better/slower extraction
 	
 	WebItemsVisualIndexer(String host, String dbname, String collectionName, 
 			String webServiceHost) 
@@ -41,21 +55,25 @@ public class WebItemsVisualIndexer implements Runnable {
 		this.input_collection = db.getCollection(collectionName);
 		
 		input_collection.addOption(Bytes.QUERYOPTION_NOTIMEOUT);
-
-		this.codebook = "/disk2_data/VisualIndex/learning_files/codebook.txt";
-		this.pca = "/disk2_data/VisualIndex/learning_files/pca.txt";
+		
+		ImageVectorization.setFeatureExtractor(new SURFExtractor());
+		VladAggregatorMultipleVocabularies vladAggregator = new VladAggregatorMultipleVocabularies(codebookFiles, numCentroids, 
+				AbstractFeatureExtractor.SURFLength);
+		
+		ImageVectorization.setVladAggregator(vladAggregator);
+		int initialLength = numCentroids.length * numCentroids[0] * AbstractFeatureExtractor.SURFLength;
+		PCA pca = new PCA(targetLengthMax, 1, initialLength, true);
+		pca.loadPCAFromFile(pcaFile);
+		ImageVectorization.setPcaProjector(pca);
 		
 		this.indexCollection = "mmdemo";
-		
-		this.vectorizer = new ImageVectorizer(codebook, pca, false);
-		
 		visualIndexHandler = new VisualIndexHandler(webServiceHost, indexCollection);
 		
 		this.queue = new ArrayBlockingQueue<DBObject>(10000);
 		
 		List<Thread> fetchers = new ArrayList<Thread>();
 		for(int i=0; i<10; i++) {
-			Thread t = new Thread(new Fetcher(queue, vectorizer, visualIndexHandler, input_collection));
+			Thread t = new Thread(new Fetcher(queue, visualIndexHandler, input_collection));
 			fetchers.add(t);
 		}
 		
@@ -150,14 +168,12 @@ public class WebItemsVisualIndexer implements Runnable {
 	public class Fetcher implements Runnable{
 
 		private ArrayBlockingQueue<DBObject> queue;
-		private ImageVectorizer vectorizer;
+
 		private VisualIndexHandler handler;
 		private DBCollection collection;
 
-		public Fetcher(ArrayBlockingQueue<DBObject> queue, ImageVectorizer vectorizer, 
-				VisualIndexHandler handler, DBCollection collection) {
+		public Fetcher(ArrayBlockingQueue<DBObject> queue, VisualIndexHandler handler, DBCollection collection) {
 			this.queue = queue;
-			this.vectorizer = vectorizer;
 			this.handler = handler;
 			this.collection = collection;
 		}
@@ -188,10 +204,9 @@ public class WebItemsVisualIndexer implements Runnable {
 					InputStream is = new URL(url).openStream();
 					BufferedImage image = ImageIO.read(is);
 					
-					double[] vector;
-					synchronized(vectorizer) {
-						vector = vectorizer.transformToVector(image);
-					}
+					ImageVectorization imvec = new ImageVectorization(id, image, targetLengthMax, maxNumPixels);
+					ImageVectorizationResult imvr = imvec.call();
+					double[] vector = imvr.getImageVector();
 					
 					boolean indexed = false;
 					synchronized(handler) {

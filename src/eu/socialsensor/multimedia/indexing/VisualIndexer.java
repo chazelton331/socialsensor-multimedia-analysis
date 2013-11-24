@@ -7,10 +7,13 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import eu.socialsensor.framework.client.search.visual.VisualIndexHandler;
-import eu.socialsensor.visual.vectorization.ImageVectorizer;
-
+import gr.iti.mklab.visual.aggregation.VladAggregatorMultipleVocabularies;
+import gr.iti.mklab.visual.dimreduction.PCA;
+import gr.iti.mklab.visual.extraction.AbstractFeatureExtractor;
+import gr.iti.mklab.visual.extraction.SURFExtractor;
+import gr.iti.mklab.visual.vectorization.ImageVectorization;
+import gr.iti.mklab.visual.vectorization.ImageVectorizationResult;
 import static backtype.storm.utils.Utils.tuple;
-
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -28,17 +31,31 @@ public class VisualIndexer extends BaseRichBolt {
 
 	private OutputCollector _collector;
 	private VisualIndexHandler visualIndex;
-	private ImageVectorizer vectorizer;
 
 	private String webServiceHost;
 	private String indexCollection;
 
-	public VisualIndexer(String webServiceHost, String indexCollection, String codebookFile, String pcaFile) throws Exception {
+	private static int[] numCentroids = { 128, 128, 128, 128 };
+	private static int targetLengthMax = 1024;
+	
+	private static int maxNumPixels = 768 * 512; // use 1024*768 for better/slower extraction
+	
+	public VisualIndexer(String webServiceHost, String indexCollection, String[] codebookFiles, String pcaFile) throws Exception {
 		
 		this.webServiceHost = webServiceHost;
 		this.indexCollection = indexCollection;
 		
-		this.vectorizer = new ImageVectorizer(codebookFile, pcaFile, false);
+
+		
+		ImageVectorization.setFeatureExtractor(new SURFExtractor());
+		VladAggregatorMultipleVocabularies vladAggregator = new VladAggregatorMultipleVocabularies(codebookFiles, numCentroids, 
+				AbstractFeatureExtractor.SURFLength);
+		
+		ImageVectorization.setVladAggregator(vladAggregator);
+		int initialLength = numCentroids.length * numCentroids[0] * AbstractFeatureExtractor.SURFLength;
+		PCA pca = new PCA(targetLengthMax, 1, initialLength, true);
+		pca.loadPCAFromFile(pcaFile);
+		ImageVectorization.setPcaProjector(pca);
 	}
 	
 	public void prepare(@SuppressWarnings("rawtypes") Map stormConf, TopologyContext context,
@@ -57,31 +74,27 @@ public class VisualIndexer extends BaseRichBolt {
 		
 		System.out.println("Fetch and extract feature vector for " + id + " with score " + score);
 		try {
-			if(vectorizer == null) {
-				System.out.println("Vectorizer is null");
-				_collector.emit(tuple(id, Boolean.FALSE, -1, -1));
-				return;
-			}
 			
-			BufferedImage img = ImageIO.read(new URL(url));
+			
+			BufferedImage image = ImageIO.read(new URL(url));
 			
 			Integer width=-1, height=-1;
 			boolean indexed = false;
-			if(img != null) {
+			if(image != null) {
+				
+				ImageVectorization imvec = new ImageVectorization(id, image, targetLengthMax, maxNumPixels);
 				
 				if(!size) {
-					width = img.getWidth();
-					height = img.getHeight();
+					width = image.getWidth();
+					height = image.getHeight();
 				}
-//			byte[] imageBytes = fetch(url);
-//			InputStream is = new ByteArrayInputStream(imageBytes);
-//			BufferedImage img = ImageIO.read(is);
 
-				double[] vector = vectorizer.transformToVector(img);
-				//System.out.println("Vector length: " + vector.length);
+				ImageVectorizationResult imvr = imvec.call();
+				double[] vector = imvr.getImageVector();
+
 			
 				indexed = visualIndex.index(id, vector);
-				//System.out.println("Indexed: " + indexed);
+
 			}
 			
 			if(indexed) {

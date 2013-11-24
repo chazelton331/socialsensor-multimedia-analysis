@@ -238,7 +238,7 @@ public class BIRCHClusterer extends TimerTask {
 		System.out.println(mediaItems.size());
 		for(MediaItem mi : mediaItems) {
 			ItemContainer item = new ItemContainer(
-					mi.getId(), mi.getAuthor(), mi.getLatitude(), 
+					mi.getId(), "uid", mi.getLatitude(), 
 					mi.getLongitude(), mi.getPublicationTime(), mi.getTitle());
 			
 			elements.put(mi.getId(), item);

@@ -30,7 +30,11 @@ public class StormVisualIndexer {
 		String indexHostname = "http://160.40.50.207:8080/VisualIndexService";
 		String indexColection = "webIndexPrototype";
 		
-		String codebook = "/home/manosetro/Desktop/learning_files/codebook.txt"; 
+		String learningFolder = "C:/Users/lef/Desktop/ITI/data/learning_files/best_files_4-11-2013/";
+		String[] codebookFiles = { learningFolder + "surf_l2_128c_0.csv",
+				learningFolder + "surf_l2_128c_1.csv", learningFolder + "surf_l2_128c_2.csv",
+				learningFolder + "surf_l2_128c_3.csv" };
+		
 		String pcaFile = "/home/manosetro/Desktop/learning_files/pca.txt";
 		
 		DBObject query = new BasicDBObject("status", "new");
@@ -38,7 +42,7 @@ public class StormVisualIndexer {
 	
 		VisualIndexer visualIndexer;
 		try {
-			visualIndexer = new VisualIndexer(indexHostname, indexColection, codebook, pcaFile);
+			visualIndexer = new VisualIndexer(indexHostname, indexColection, codebookFiles, pcaFile);
 		} catch (Exception e) {
 			return;
 		}

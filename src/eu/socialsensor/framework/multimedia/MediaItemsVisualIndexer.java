@@ -18,7 +18,13 @@ import com.mongodb.MongoClient;
 import com.mongodb.Bytes;
 
 import eu.socialsensor.framework.client.search.visual.VisualIndexHandler;
-import eu.socialsensor.visual.vectorization.ImageVectorizer;
+
+import gr.iti.mklab.visual.aggregation.VladAggregatorMultipleVocabularies;
+import gr.iti.mklab.visual.dimreduction.PCA;
+import gr.iti.mklab.visual.extraction.AbstractFeatureExtractor;
+import gr.iti.mklab.visual.extraction.SURFExtractor;
+import gr.iti.mklab.visual.vectorization.ImageVectorization;
+import gr.iti.mklab.visual.vectorization.ImageVectorizationResult;
 
 public class MediaItemsVisualIndexer implements Runnable {
 
@@ -27,10 +33,14 @@ public class MediaItemsVisualIndexer implements Runnable {
 	private DBCollection input_collection;
 	
 	private VisualIndexHandler visualIndexHandler;
-	private ImageVectorizer vectorizer;
+	
+	private static int[] numCentroids = { 128, 128, 128, 128 };
+	private static int targetLengthMax = 1024;
+	
+	private static int maxNumPixels = 768 * 512; // use 1024*768 for better/slower extraction
 	
 	MediaItemsVisualIndexer(String host, String dbname, String collectionName, 
-			String webServiceHost, String indexCollection, String codebook, String pca) 
+			String webServiceHost, String indexCollection, String[] codebookFiles, String pcaFile) 
 			throws Exception {
 		
 		this.mongo = new MongoClient(host);
@@ -39,7 +49,16 @@ public class MediaItemsVisualIndexer implements Runnable {
 		
 		input_collection.addOption(Bytes.QUERYOPTION_NOTIMEOUT);
 		
-		this.vectorizer = new ImageVectorizer(codebook, pca, true);
+		ImageVectorization.setFeatureExtractor(new SURFExtractor());
+		VladAggregatorMultipleVocabularies vladAggregator = new VladAggregatorMultipleVocabularies(codebookFiles, numCentroids, 
+				AbstractFeatureExtractor.SURFLength);
+		
+		ImageVectorization.setVladAggregator(vladAggregator);
+		int initialLength = numCentroids.length * numCentroids[0] * AbstractFeatureExtractor.SURFLength;
+		PCA pca = new PCA(targetLengthMax, 1, initialLength, true);
+		pca.loadPCAFromFile(pcaFile);
+		ImageVectorization.setPcaProjector(pca);
+		
 		this.visualIndexHandler = new VisualIndexHandler(webServiceHost, indexCollection);
 	}
 	
@@ -71,7 +90,11 @@ public class MediaItemsVisualIndexer implements Runnable {
 					}
 					
 					BufferedImage image = ImageIO.read(new ByteArrayInputStream(content));
-					double[] vector = vectorizer.transformToVector(image);
+					
+					ImageVectorization imvec = new ImageVectorization(id, image, targetLengthMax, maxNumPixels);
+					ImageVectorizationResult imvr = imvec.call();
+					double[] vector = imvr.getImageVector();
+					
 					if(visualIndexHandler.index(id, vector)) {
 						DBObject q = new BasicDBObject("id", id);
 						DBObject o = new BasicDBObject("$set", 
