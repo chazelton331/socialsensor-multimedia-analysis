@@ -23,7 +23,8 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import eu.socialsensor.framework.common.domain.MediaItem;
 import eu.socialsensor.framework.common.factories.ItemFactory;
-import eu.socialsensor.framework.client.search.visual.NearestImage;
+import eu.socialsensor.framework.client.search.visual.JsonResultSet;
+import eu.socialsensor.framework.client.search.visual.JsonResultSet.JsonResult;
 import eu.socialsensor.framework.client.search.visual.VisualIndexHandler;
 
 
@@ -56,12 +57,13 @@ public class VisualClusterer {
 			//mediaItemsRefs.put(id, mediaItem.getRef());
 			mediaItemsGraph.addVertex(id);
 			
-			NearestImage[] similarImages = visualIndex.getSimilarImages(id, THRESHOLD);
+			JsonResultSet similarImages = visualIndex.getSimilarImages(id, THRESHOLD);
 			if(similarImages != null) {
-				for(NearestImage nearestImage : similarImages) {
-					if(!mediaItemsGraph.containsVertex(nearestImage.id))
-						mediaItemsGraph.addVertex(nearestImage.id);
-					mediaItemsGraph.addEdge(new GraphLink(nearestImage.similarity), id, nearestImage.id);
+				for(JsonResult nearestImage : similarImages.getResults()) {
+					if(!mediaItemsGraph.containsVertex(nearestImage.getId()))
+						mediaItemsGraph.addVertex(nearestImage.getId());
+					float similarity = Float.parseFloat(nearestImage.getScore());
+					mediaItemsGraph.addEdge(new GraphLink(similarity), id, nearestImage.getId());
 				}
 			}
 		}
