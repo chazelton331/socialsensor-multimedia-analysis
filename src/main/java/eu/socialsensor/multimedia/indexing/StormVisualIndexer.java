@@ -23,35 +23,39 @@ public class StormVisualIndexer {
 //		String codebook = args[5]; 
 //		String pcaFile = args[6];
 		
-		String mongoHost = "social1.atc.gr";
+		String mongoHost = "160.40.50.207";
 		String mongoDbName = "Streams"; 
-		String mongoCollectionName = "MediaItems";
+		String mongoCollectionName = "MediaItemsFromWP_boilerpipe";
 		
-		String indexHostname = "http://160.40.50.207:8080/VisualIndexService";
-		String indexColection = "webIndexPrototype";
+		String indexHostname = "http://160.40.50.207:8080/VisualIndex";
+		String indexColection = "prototype";
 		
-		String learningFolder = "C:/Users/lef/Desktop/ITI/data/learning_files/best_files_4-11-2013/";
-		String[] codebookFiles = { learningFolder + "surf_l2_128c_0.csv",
-				learningFolder + "surf_l2_128c_1.csv", learningFolder + "surf_l2_128c_2.csv",
+		String learningFolder = "/home/manosetro/git/multimedia-indexing/learning_files/";
+		
+		String[] codebookFiles = { 
+				learningFolder + "surf_l2_128c_0.csv",
+				learningFolder + "surf_l2_128c_1.csv", 
+				learningFolder + "surf_l2_128c_2.csv",
 				learningFolder + "surf_l2_128c_3.csv" };
 		
-		String pcaFile = "/home/manosetro/Desktop/learning_files/pca.txt";
+		String pcaFile = learningFolder + "pca_surf_4x128_32768to1024.txt";
+		
 		
 		DBObject query = new BasicDBObject("status", "new");
 		query.put("type", "image");
 	
-		VisualIndexer visualIndexer;
+		VisualIndexerBolt visualIndexer;
 		try {
-			visualIndexer = new VisualIndexer(indexHostname, indexColection, codebookFiles, pcaFile);
+			visualIndexer = new VisualIndexerBolt(indexHostname, indexColection, codebookFiles, pcaFile);
 		} catch (Exception e) {
 			return;
 		}
 		
-		Updater updater = new Updater(mongoHost, mongoDbName, mongoCollectionName);
+		UpdaterBolt updater = new UpdaterBolt(mongoHost, mongoDbName, mongoCollectionName);
 		
 		TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("injector", new MongoDBInjector(mongoHost, mongoDbName, mongoCollectionName, query), 1);
-        builder.setBolt("ranker", new MediaRanker(), 2).shuffleGrouping("injector");
+        builder.setBolt("ranker", new MediaRankerBolt(), 2).shuffleGrouping("injector");
         builder.setBolt("indexer", visualIndexer, 2).shuffleGrouping("ranker");
      
 		builder.setBolt("updater", updater, 2).shuffleGrouping("indexer");

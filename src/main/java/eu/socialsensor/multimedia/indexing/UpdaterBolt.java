@@ -16,7 +16,7 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
 
 
-public class Updater extends BaseRichBolt {
+public class UpdaterBolt extends BaseRichBolt {
 
     /**
 	 * 
@@ -29,7 +29,7 @@ public class Updater extends BaseRichBolt {
 	private DB _database;
 	private DBCollection _collection;
 
-	public Updater(String mongoHost, String mongoDbName, String mongoCollectionName) {
+	public UpdaterBolt(String mongoHost, String mongoDbName, String mongoCollectionName) {
 		this.mongoHost = mongoHost;
 		this.mongoDbName = mongoDbName;
 		this.mongoCollectionName = mongoCollectionName;

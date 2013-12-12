@@ -13,7 +13,7 @@ import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
 
-public class MediaRanker extends BaseRichBolt {
+public class MediaRankerBolt extends BaseRichBolt {
 
     /**
 	 * 

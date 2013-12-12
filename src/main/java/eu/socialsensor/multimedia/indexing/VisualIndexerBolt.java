@@ -21,7 +21,7 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 
-public class VisualIndexer extends BaseRichBolt {
+public class VisualIndexerBolt extends BaseRichBolt {
 
 	/**
 	 * 
@@ -40,22 +40,24 @@ public class VisualIndexer extends BaseRichBolt {
 	
 	private static int maxNumPixels = 768 * 512; // use 1024*768 for better/slower extraction
 	
-	public VisualIndexer(String webServiceHost, String indexCollection, String[] codebookFiles, String pcaFile) throws Exception {
+	public VisualIndexerBolt(String webServiceHost, String indexCollection, String[] codebookFiles, String pcaFile) throws Exception {
 		
 		this.webServiceHost = webServiceHost;
 		this.indexCollection = indexCollection;
 		
-
-		
 		ImageVectorization.setFeatureExtractor(new SURFExtractor());
+		
 		VladAggregatorMultipleVocabularies vladAggregator = new VladAggregatorMultipleVocabularies(codebookFiles, numCentroids, 
 				AbstractFeatureExtractor.SURFLength);
 		
 		ImageVectorization.setVladAggregator(vladAggregator);
+		
 		int initialLength = numCentroids.length * numCentroids[0] * AbstractFeatureExtractor.SURFLength;
-		PCA pca = new PCA(targetLengthMax, 1, initialLength, true);
-		pca.loadPCAFromFile(pcaFile);
-		ImageVectorization.setPcaProjector(pca);
+		if(initialLength > targetLengthMax) {
+			PCA pca = new PCA(targetLengthMax, 1, initialLength, true);
+			pca.loadPCAFromFile(pcaFile);
+			ImageVectorization.setPcaProjector(pca);
+		}
 	}
 	
 	public void prepare(@SuppressWarnings("rawtypes") Map stormConf, TopologyContext context,
