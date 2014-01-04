@@ -25,12 +25,12 @@ public class StormVisualIndexer {
 		
 		String mongoHost = "160.40.50.207";
 		String mongoDbName = "Streams"; 
-		String mongoCollectionName = "MediaItemsFromWP_boilerpipe";
+		String mongoCollectionName = "MediaItems";
 		
 		String indexHostname = "http://160.40.50.207:8080/VisualIndex";
-		String indexColection = "prototype";
+		String indexColection = "mmdemo";
 		
-		String learningFolder = "/home/manosetro/git/multimedia-indexing/learning_files/";
+		String learningFolder = "/disk2_data/VisualIndex/learning_files/";
 		
 		String[] codebookFiles = { 
 				learningFolder + "surf_l2_128c_0.csv",
