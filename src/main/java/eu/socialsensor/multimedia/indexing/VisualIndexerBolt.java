@@ -27,8 +27,7 @@ public class VisualIndexerBolt extends BaseRichBolt {
 	 * 
 	 */
 	private static final long serialVersionUID = -5514715036795163046L;
-
-
+	
 	private OutputCollector _collector;
 	private VisualIndexHandler visualIndex;
 
@@ -70,11 +69,11 @@ public class VisualIndexerBolt extends BaseRichBolt {
 		
 		String id = tuple.getStringByField("id");
 		String url = tuple.getStringByField("url");
-		Double score = tuple.getDoubleByField("score");
+		//Double score = tuple.getDoubleByField("score");
 		
 		boolean size = tuple.getBooleanByField("size");
 		
-		System.out.println("Fetch and extract feature vector for " + id + " with score " + score);
+		//System.out.println("Fetch and extract feature vector for " + id + " with score " + score);
 		try {
 			
 			
@@ -82,6 +81,7 @@ public class VisualIndexerBolt extends BaseRichBolt {
 			
 			Integer width=-1, height=-1;
 			boolean indexed = false;
+			
 			if(image != null) {
 				
 				ImageVectorization imvec = new ImageVectorization(id, image, targetLengthMax, maxNumPixels);
@@ -94,9 +94,9 @@ public class VisualIndexerBolt extends BaseRichBolt {
 				ImageVectorizationResult imvr = imvec.call();
 				double[] vector = imvr.getImageVector();
 
-			
+				
 				indexed = visualIndex.index(id, vector);
-
+	
 			}
 			
 			if(indexed) {
@@ -117,12 +117,4 @@ public class VisualIndexerBolt extends BaseRichBolt {
 		declarer.declare(new Fields("id", "indexed", "width", "height"));
 	}
 
-//	private byte[] fetch(String urlStr) throws IOException {
-//		URL url = new URL(urlStr);
-//		StringWriter writer = new StringWriter();
-//		IOUtils.copy(new InputStreamReader(url.openStream()), writer);
-//		
-//		byte[] bytes = writer.toString().getBytes();
-//		return bytes;
-//	}
 }
