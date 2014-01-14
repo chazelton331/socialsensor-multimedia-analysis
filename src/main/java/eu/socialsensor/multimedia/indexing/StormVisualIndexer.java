@@ -2,6 +2,10 @@ package eu.socialsensor.multimedia.indexing;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
@@ -52,12 +56,17 @@ public class StormVisualIndexer {
 			return;
 		}
 		
+		DBObject query = new BasicDBObject("type", "image");
+		query.put("indexed", false);
+		query.put("status", "new");
+		
 		UpdaterBolt updater = new UpdaterBolt(mongoHost, mongoDbName, mongoCollectionName, clustersCollectionName,
 				indexHostname, indexCollection);
 		
 		TopologyBuilder builder = new TopologyBuilder();
-        //builder.setSpout("injector", new MongoDBInjector(mongoHost, mongoDbName, mongoCollectionName, query), 1);
-        builder.setSpout("injector", new RedisInjector(redisHost), 1);
+        
+		builder.setSpout("injector", new MongoDBInjector(mongoHost, mongoDbName, mongoCollectionName, query), 1);
+        //builder.setSpout("injector", new RedisInjector(redisHost), 1);
         builder.setBolt("ranker", new MediaRankerBolt(), 4).shuffleGrouping("injector");
         builder.setBolt("indexer", visualIndexer, 16).shuffleGrouping("ranker");
      

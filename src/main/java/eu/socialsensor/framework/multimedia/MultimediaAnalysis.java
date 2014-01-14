@@ -12,10 +12,10 @@ public class MultimediaAnalysis {
 	
 	public static void main(String[] args) {
 		
-		String host = "160.40.50.207";
-		String db = "MMdemoStreams";
+		String host = "160.40.51.18";
+		String db = "Streams";
 		String input = "MediaItems";
-		String output = "histogram";
+		//String output = "histogram";
 		
 		//String solr_host = "http://160.40.50.207:8080/solr/";
 		
@@ -43,6 +43,7 @@ public class MultimediaAnalysis {
 			e.printStackTrace();
 		}
 
+		/*
 		ItemsCounter hours_counter;
 		try {
 			hours_counter = new ItemsCounter(ItemsCounter.HOURS, host, db, input, "hours_"+output);
@@ -67,6 +68,7 @@ public class MultimediaAnalysis {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 //		
 //		BIRCHClusterer hotspotsClustering;
 //		try {

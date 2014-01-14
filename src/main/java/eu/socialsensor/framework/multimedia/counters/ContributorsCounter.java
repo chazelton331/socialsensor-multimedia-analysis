@@ -21,7 +21,7 @@ public class ContributorsCounter extends TimerTask {
 	//private String output;
 
 	private static String map = "function() { " +
-			"   var k = {stream:this.streamId, author:this.author}; " + 
+			"   var k = {stream:this.streamId, author:this.uid}; " + 
         	"	emit(k, 1); " +
         	"}";
 	//"   var k = {stream:this.streamId, id:this.author_id, username:this.author}; " + 
@@ -47,7 +47,7 @@ public class ContributorsCounter extends TimerTask {
 		this.outputType = MapReduceCommand.OutputType.REPLACE;
 		
 		DBObject query = new BasicDBObject();
-		query.put("author", new BasicDBObject("$exists", Boolean.TRUE));
+		query.put("uid", new BasicDBObject("$exists", Boolean.TRUE));
 				
 		//this.output = output;
 		this.mr_cmd = new MapReduceCommand(collection, map, reduce, output, outputType, query);
