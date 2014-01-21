@@ -27,7 +27,8 @@ public class StormVisualIndexer {
 		catch(ConfigurationException ex) {
 			return;
 		}
-		String redisHost = config.getString("redis.host");
+		
+		//String redisHost = config.getString("redis.host");
 		
 		String mongoHost = config.getString("mongodb.host");
 		String mongoDbName = config.getString("mongodb.db");
@@ -57,7 +58,7 @@ public class StormVisualIndexer {
 		}
 		
 		DBObject query = new BasicDBObject("type", "image");
-		query.put("indexed", false);
+		query.put("vIndexed", false);
 		query.put("status", "new");
 		
 		UpdaterBolt updater = new UpdaterBolt(mongoHost, mongoDbName, mongoCollectionName, clustersCollectionName,

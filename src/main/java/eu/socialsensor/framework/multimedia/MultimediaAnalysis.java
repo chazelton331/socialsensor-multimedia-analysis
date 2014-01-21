@@ -13,7 +13,7 @@ public class MultimediaAnalysis {
 	public static void main(String[] args) {
 		
 		String host = "160.40.51.18";
-		String db = "Streams";
+		String db = "FeteBerlin";
 		String input = "MediaItems";
 		//String output = "histogram";
 		

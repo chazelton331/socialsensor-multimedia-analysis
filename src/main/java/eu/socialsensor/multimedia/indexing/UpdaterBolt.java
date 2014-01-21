@@ -73,8 +73,8 @@ public class UpdaterBolt extends BaseRichBolt {
 			
 			_visualIndex = new VisualIndexHandler(webServiceHost, indexCollection);
 			
-			Thread thread = new Thread(new Clusterer(_mQ, _visualIndex));
-			thread.start();
+			//Thread thread = new Thread(new Clusterer(_mQ, _visualIndex));
+			//thread.start();
 			
 		} catch (Exception e) {
 			
@@ -91,7 +91,7 @@ public class UpdaterBolt extends BaseRichBolt {
 		if(_collection != null) {
 			DBObject q = new BasicDBObject("id", id);
 			
-			BasicDBObject f = new BasicDBObject("indexed", indexed);
+			BasicDBObject f = new BasicDBObject("vIndexed", indexed);
 			if(indexed)
 				f.put("status", "indexed");
 			else

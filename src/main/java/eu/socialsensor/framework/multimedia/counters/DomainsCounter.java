@@ -24,6 +24,7 @@ public class DomainsCounter extends TimerTask {
 			"   var domain = this.url.match(/:\\/\\/(.[^/]+)/)[1]; " + 
 			"   if(domain.indexOf('flickr.com', domain.length - 'flickr.com'.length) !== -1) domain='flickr.com'; "+
 			"   if(domain.indexOf('fbcdn.net', domain.length - 'fbcdn.net'.length) !== -1) domain='fbcdn.net'; "+
+			"   if(domain.indexOf('amazonaws.com', domain.length - 'amazonaws.com'.length) !== -1) domain='amazonaws.com'; "+
         	"	emit(domain, 1); " +
         	"}";
 	
