@@ -1,6 +1,7 @@
 package eu.socialsensor.multimedia.indexing;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,6 +13,8 @@ import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.io.IOUtils;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -92,8 +95,9 @@ public class VisualIndexerBolt extends BaseRichBolt {
 		//System.out.println("Fetch and extract feature vector for " + id + " with score " + score);
 		try {
 			
+			byte[] imageContent = IOUtils.toByteArray(new URL(url));
+			BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageContent));
 			
-			BufferedImage image = ImageIO.read(new URL(url));
 			
 			Integer width=-1, height=-1;
 			boolean indexed = false;
@@ -123,7 +127,7 @@ public class VisualIndexerBolt extends BaseRichBolt {
 			}
 		} 
 		catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("Exception: " + e.getMessage() + " url: "+url);
 			_collector.emit(tuple(id, Boolean.FALSE, -1, -1));
 			return;
 		}

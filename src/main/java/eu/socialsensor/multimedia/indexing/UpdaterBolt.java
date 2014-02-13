@@ -73,8 +73,8 @@ public class UpdaterBolt extends BaseRichBolt {
 			
 			_visualIndex = new VisualIndexHandler(webServiceHost, indexCollection);
 			
-			//Thread thread = new Thread(new Clusterer(_mQ, _visualIndex));
-			//thread.start();
+			Thread thread = new Thread(new Clusterer(_mQ, _visualIndex));
+			thread.start();
 			
 		} catch (Exception e) {
 			
@@ -112,7 +112,7 @@ public class UpdaterBolt extends BaseRichBolt {
 	public class Clusterer implements Runnable {
 
 		private Queue<String> queue;
-		private double threshold = 0.6;
+		private double threshold = 0.8;
 		private VisualIndexHandler visualIndex;
 		
 		public Clusterer(Queue<String> queue, VisualIndexHandler visualIndex) {
