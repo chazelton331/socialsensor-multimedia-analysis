@@ -122,8 +122,6 @@ public class MongoDBInjector extends BaseRichSpout {
 			while(true) {
 				DBCollection collection = mongoDB.getCollection(mongoCollectionName);
 				
-				//DBObject orderBy = new BasicDBObject("publicationTime", -1);
-				
 				DBCursor cursor = collection.find(query)
 						.limit(500);
 				
