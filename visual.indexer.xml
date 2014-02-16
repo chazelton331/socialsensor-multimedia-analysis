@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<configuration>
+
+    <redis>
+        <host>localhost</host>
+        <channel>MediaItems</channel>
+    </redis>
+    <mongodb>
+        <host>160.40.51.18</host>
+        <db>GreekNews</db>
+        <collection>MediaItems</collection>
+        <clusters>MediaItemClusters</clusters>
+    </mongodb>
+    <visualindex>
+        <host>http://160.40.51.18:8080/VisualIndexService</host>
+        <collection>greeknews</collection>
+    </visualindex>
+    <learningfiles>
+        /disk2_data/VisualIndex/learning_files 
+    </learningfiles>
+
+</configuration>
