@@ -27,16 +27,21 @@ public class RedisInjector extends BaseRichSpout {
 
 	static final long serialVersionUID = 737015318988609460L;
 
-	static final String mediaChannel = "MediaItems";
+	private String mediaChannel = "media";
 	
-	SpoutOutputCollector _collector;
-	final String host;
+	private SpoutOutputCollector _collector;
+	private String host;
 	
 	LinkedBlockingQueue<String> queue;
 	JedisPool pool;
 
 	public RedisInjector(String host) {
 		this.host = host;
+	}
+	
+	public RedisInjector(String host, String channel) {
+		this.host = host;
+		this.mediaChannel = channel;
 	}
 
 	class ListenerThread extends Thread {
@@ -105,7 +110,7 @@ public class RedisInjector extends BaseRichSpout {
         } else {
         	//MediaItem mediaItem = ObjectFactory.createMediaItem(ret);
         	DBObject dbo = (DBObject) JSON.parse(ret);
-        	//System.out.println(dbo.toString());
+        	System.out.println(dbo.toString());
         	_collector.emit(tuple(dbo));            
         }
 	}
@@ -128,7 +133,7 @@ public class RedisInjector extends BaseRichSpout {
 	
 	public static void main(String...args) {
 		TopologyBuilder builder = new TopologyBuilder();
-        builder.setSpout("injector", new RedisInjector("localhost"), 1);
+        builder.setSpout("injector", new RedisInjector("xxx.xxx.xxx.xxx"), 1);
      
         Config conf = new Config();
         LocalCluster cluster = new LocalCluster();
