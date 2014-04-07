@@ -20,7 +20,7 @@ public class MultimediaDyscoCreator implements GenericDyscoCreator {
 	private VisualClusterer visualClusterer;
 	
 	
-	public MultimediaDyscoCreator(String mongoDbHost, String visualIndexHost, String indexCollection) {
+	public MultimediaDyscoCreator(String mongoDbHost, String visualIndexHost, String indexCollection) throws Exception {
 		mediaItemDAO = new MediaItemDAOImpl(mongoDbHost, "first_prototype_2");
 		//itemDAO = new ItemDAOImpl(mongoDbHost);
 		visualClusterer = new VisualClusterer(visualIndexHost, indexCollection);

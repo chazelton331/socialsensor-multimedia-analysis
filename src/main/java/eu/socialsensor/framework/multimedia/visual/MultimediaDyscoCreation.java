@@ -13,7 +13,7 @@ public class MultimediaDyscoCreation implements Runnable {
 	
 	MultimediaDyscoCreator dyscoCreator;
 	
-	public MultimediaDyscoCreation(String mongoDbHost, String mongoDb, String visualIndexHost, String indexCollection) {
+	public MultimediaDyscoCreation(String mongoDbHost, String mongoDb, String visualIndexHost, String indexCollection) throws Exception {
 		itemDAO = new ItemDAOImpl(mongoDbHost, mongoDb);
 		dyscoCreator = new MultimediaDyscoCreator(mongoDbHost, visualIndexHost, indexCollection);
 	}
@@ -38,9 +38,9 @@ public class MultimediaDyscoCreation implements Runnable {
 
 	/**
 	 * @param args
-	 * @throws InterruptedException 
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws Exception {
 		Thread thread = new Thread(new MultimediaDyscoCreation(
 				"160.40.50.207", "Streams", "http://160.40.50.207:8080", "mmdemo"));
 		

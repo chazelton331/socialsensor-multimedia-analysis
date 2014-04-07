@@ -29,7 +29,7 @@ public class EntitiesExtractor {
 	@SuppressWarnings("rawtypes")
 	AbstractSequenceClassifier classifier = CRFClassifier.getClassifierNoExceptions(model);
 
-	public static void main(String[] args) throws UnknownHostException, InterruptedException {
+	public static void main(String[] args) throws Exception {
 				
 		EntitiesExtractor extractor = new EntitiesExtractor();
 		ItemDAO itemDAO = new ItemDAOImpl("localhost", "loc", "Items");
