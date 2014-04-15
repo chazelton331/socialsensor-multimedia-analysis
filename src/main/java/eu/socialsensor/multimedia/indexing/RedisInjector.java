@@ -2,7 +2,9 @@ package eu.socialsensor.multimedia.indexing;
 
 import static backtype.storm.utils.Utils.tuple;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import com.mongodb.DBObject;
@@ -35,6 +37,10 @@ public class RedisInjector extends BaseRichSpout {
 	LinkedBlockingQueue<String> queue;
 	JedisPool pool;
 
+	int items = 0, original = 0;
+	long t = System.currentTimeMillis();
+	Set<String> ids = new HashSet<String>();
+	
 	public RedisInjector(String host) {
 		this.host = host;
 	}
@@ -91,8 +97,8 @@ public class RedisInjector extends BaseRichSpout {
 
 	public void open(@SuppressWarnings("rawtypes") Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		_collector = collector;
-		queue = new LinkedBlockingQueue<String>(5000);
-		pool = new JedisPool(new JedisPoolConfig(),host);
+		queue = new LinkedBlockingQueue<String>(10000);
+		pool = new JedisPool(new JedisPoolConfig(), host);
 
 		ListenerThread listener = new ListenerThread(queue, pool);
 		listener.start();
@@ -104,15 +110,33 @@ public class RedisInjector extends BaseRichSpout {
 	}
 
 	public void nextTuple() {
-		String ret = queue.poll();
-        if(ret == null) {
-            Utils.sleep(10);
-        } else {
-        	//MediaItem mediaItem = ObjectFactory.createMediaItem(ret);
-        	DBObject dbo = (DBObject) JSON.parse(ret);
-        	System.out.println(dbo.toString());
-        	_collector.emit(tuple(dbo));            
-        }
+		try {
+			String ret = queue.poll();
+        	if(ret == null) {
+        		Utils.sleep(100);
+        	} else {
+        		DBObject dbo = (DBObject) JSON.parse(ret);
+        		_collector.emit(tuple(dbo));       
+        		
+        		String id = (String) dbo.get("id");
+        		if(!ids.contains(id)) {
+        			ids.add(id);
+        			original++;
+        		}
+        		
+        		if((++items)%100==0) {
+					System.out.println(items + " items!");
+					System.out.println(original + " original items!");
+					System.out.println((1000*items)/(System.currentTimeMillis() - t) + " items/sec");
+					System.out.println((1000*original)/(System.currentTimeMillis() - t) + " original/sec");
+					System.out.println("==============================");
+				}
+        		
+        	}
+		}
+		catch(Exception e) {
+			System.out.println("Exception: " + e.getMessage());
+		}
 	}
 
 	public void ack(Object msgId) {
@@ -133,7 +157,7 @@ public class RedisInjector extends BaseRichSpout {
 	
 	public static void main(String...args) {
 		TopologyBuilder builder = new TopologyBuilder();
-        builder.setSpout("injector", new RedisInjector("xxx.xxx.xxx.xxx"), 1);
+        builder.setSpout("injector", new RedisInjector("xxx.xxx.xxx.xxx", "media"), 1);
      
         Config conf = new Config();
         LocalCluster cluster = new LocalCluster();

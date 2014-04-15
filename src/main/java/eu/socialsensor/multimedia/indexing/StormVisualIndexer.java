@@ -61,7 +61,7 @@ public class StormVisualIndexer {
 		query.put("vIndexed", false);
 		query.put("status", "new");
 		
-		UpdaterBolt updater = new UpdaterBolt(mongoHost, mongoDbName, mongoCollectionName, clustersCollectionName,
+		MediaUpdaterBolt updater = new MediaUpdaterBolt(mongoHost, mongoDbName, mongoCollectionName, clustersCollectionName,
 				indexHostname, indexCollection);
 		
 		TopologyBuilder builder = new TopologyBuilder();

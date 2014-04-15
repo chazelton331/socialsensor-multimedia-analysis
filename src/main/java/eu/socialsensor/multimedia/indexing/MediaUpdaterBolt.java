@@ -24,7 +24,7 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
 
 
-public class UpdaterBolt extends BaseRichBolt {
+public class MediaUpdaterBolt extends BaseRichBolt {
 
     /**
 	 * 
@@ -48,7 +48,7 @@ public class UpdaterBolt extends BaseRichBolt {
 	private String webServiceHost;
 	private String indexCollection;
 
-	public UpdaterBolt(String mongoHost, String mongoDbName, String mongoCollectionName, String clustersCollectionName,
+	public MediaUpdaterBolt(String mongoHost, String mongoDbName, String mongoCollectionName, String clustersCollectionName,
 			String webServiceHost, String indexCollection) {
 		this.mongoHost = mongoHost;
 		this.mongoDbName = mongoDbName;
