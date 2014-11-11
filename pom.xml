@@ -25,6 +25,12 @@
     	</license>
   	</licenses>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    
   	<dependencies>
   		<dependency>
   			<groupId>org.apache.directory.studio</groupId>
@@ -34,12 +40,12 @@
   		<dependency>
   			<groupId>eu.socialsensor</groupId>
   			<artifactId>socialsensor-framework-client</artifactId>
-  			<version>0.2-SNAPSHOT</version>
+  			<version>0.2.2-SNAPSHOT</version>
   		</dependency>
   		<dependency>
   			<groupId>eu.socialsensor</groupId>
   			<artifactId>socialsensor-framework-common</artifactId>
-  			<version>0.2-SNAPSHOT</version>
+  			<version>0.2.2-SNAPSHOT</version>
   		</dependency>
   		<dependency>
   			<groupId>eu.socialsensor</groupId>
