@@ -87,7 +87,9 @@ To initialize and execute birch clustering:
 
 <h2>Visual Analysis</h2> 
 
-The package <b>eu.socialsensor.framework.multimedia.visual</b> contains a set of classes for the periodic clustering of media items based on their visual similarity. The visual similarity of media items is based on a combination of SURF descriptors aggregated with the VLAD scheme. For the clustering, SCAN graph clustering algorithm is used.  
+The package <b>eu.socialsensor.framework.multimedia.visual</b> contains a set of classes for the periodic clustering of media items based on their visual similarity. The visual similarity of media items is based on a combination of SURF descriptors aggregated with the VLAD scheme. For the extraction of VLAD+SURF descriptors the implemetation of Socialsensor is used:
+[multimedia-indexing](https://github.com/socialsensor/socialsensor-multimedia-analysis)
+For the clustering, SCAN graph clustering algorithm is used.  
 
 Additional information
 ------------------------
