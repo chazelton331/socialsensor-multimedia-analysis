@@ -4,7 +4,8 @@ socialsensor-multimedia-analysis
 Contains a set of analysis processes on streams of incoming media items.
 
 <h2>Counters</h2>
-<p> Counters is a set of services that executed periodically by extending the class TimeTask of Java. In the package <b>eu.socialsensor.framework.multimedia.counters</b> there are four counters for counting contributors, domains, tags and items. 
+<p> Counters is a set of services that executed periodically by extending the class TimeTask of Java. In the package <b>eu.socialsensor.framework.multimedia.counters</b> there are four counters for counting contributors, domains and tags
+by submiting map/reduce jobs in mongodb. 
 
 </p>
 
@@ -63,13 +64,6 @@ The domains counter is initialized and executed in a similar manner.
 		emit(domain, 1);
         }
         	
-<h3>ItemsCounter</h3>
-
-
-
-
-
-
 
 
 Additional information
