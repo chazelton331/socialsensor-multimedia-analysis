@@ -11,7 +11,13 @@ Contains a set of analysis processes on streams of incoming media items.
 <h2>ContributorsCounter</h2>
 ContributorsCounter is based on the MapReduce operation of mongodb and counts the number of unique contributors (users) per timeslot.  
 
+<h2>TagsCounter</h2>
 
+
+<h2>DomainsCounter</h2>
+
+
+<h2>ItemsCounter</h2>
 
 
 
