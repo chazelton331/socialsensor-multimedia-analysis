@@ -66,6 +66,24 @@ The domains counter is initialized and executed in a similar manner.
         	
 
 
+<h2>Geospatial Analysis</h2> 
+
+The package <b>eu.socialsensor.framework.multimedia.spatial</b> contains a set of classes for the periodic clustering of media items based on their spatial proximity. The proximity of media items is based om the Vincenty geiodesic distance between two geo-points. The used clustering algorithm is BIRCH. 
+The resulted clusters indexed in a solr collection.  
+
+To initialize and execute birch clustering:
+
+	Timer timer = new Timer(); 
+	timer.schedule(
+		new BIRCHClusterer(
+			"mongoHostname", 
+			"mongoDBname"
+			"collection", 
+			"solrHostname"), 
+		0, 
+		15*60*1000
+	);
+					
 Additional information
 ------------------------
 ###Project dependencies###
