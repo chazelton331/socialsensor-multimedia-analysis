@@ -11,12 +11,14 @@ Contains a set of analysis processes on streams of incoming media items.
 <h2>ContributorsCounter</h2>
 ContributorsCounter is based on the MapReduce operation of mongodb and counts the number of unique contributors (users) per timeslot.  
 
-To initialize and execute contributors counter every 30 minutes run the code below:
+To initialize and execute contributors counter every 30 minutes run the following code:
 
       ContributorsCounter counter = new ContributorsCounter("hostname", "dbname", "collection");
       Timer call = new Timer();
       call.scheduleAtFixedRate(counter, 0, 30*60*1000);
-      
+
+The service executes the following map/reduce job every 30 minutes. 
+<b>map</b>
       function() { 
 	      var k = {stream:this.streamId, author:this.author}; 
             emit(k, 1);
