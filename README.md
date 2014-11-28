@@ -18,7 +18,8 @@ To initialize and execute contributors counter every 30 minutes run the followin
       call.scheduleAtFixedRate(counter, 0, 30*60*1000);
 
 The service submit the the following map/reduce javascript functions and mongodb engine executes them and 
-writes the results in the collction "output" </br>
+writes the results in the collection "output" </br>
+
 <b>map</b>
 
       function() {
@@ -37,7 +38,7 @@ writes the results in the collction "output" </br>
         }
         		
 <h3>TagsCounter</h3>
-In  similar manner is initialized and executed the tags counter. 
+The tags counter is initialized and executed in a similar manner.  
 
 <h3>DomainsCounter</h3>
 
