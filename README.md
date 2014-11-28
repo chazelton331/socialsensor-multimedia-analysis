@@ -13,9 +13,14 @@ ContributorsCounter is based on the MapReduce operation of mongodb and counts th
 
 To initialize and execute contributors counter every 30 minutes run the code below:
 
-      ContributorsCounter counter = new ContributorsCounter("hostname", "dbname", "collection"); </br>
-      Timer call = new Timer(); </br>
-      call.scheduleAtFixedRate(counter, 0, 30*60*1000); </br>
+      ContributorsCounter counter = new ContributorsCounter("hostname", "dbname", "collection");
+      Timer call = new Timer();
+      call.scheduleAtFixedRate(counter, 0, 30*60*1000);
+      
+      function() { 
+	      var k = {stream:this.streamId, author:this.author}; 
+            emit(k, 1);
+      }
       
 <h3>TagsCounter</h3>
 
