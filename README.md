@@ -20,14 +20,14 @@ To initialize and execute contributors counter every 30 minutes run the followin
 The service submit the the following map/reduce javascript functions and mongodb engine executes them and 
 writes the results in the collection "output" </br>
 
-<b>map</b>
+<b>map function</b>
 
       function() {
       	var k = {stream:this.streamId, author:this.author}; 
     	emit(k, 1);
       }
       
-<b>reduce</b>    
+<b>reduce function</b>    
 
 	function(previous, current) {  
         	var count = 0;
@@ -40,7 +40,7 @@ writes the results in the collection "output" </br>
 <h3>TagsCounter</h3>
 The tags counter is initialized and executed in a similar manner.  
 
-<b>map</b>
+<b>map function</b>
 
 	function() {
         	for (index in this.tags) {
@@ -52,7 +52,7 @@ The tags counter is initialized and executed in a similar manner.
         	}
         }
  
- <b>reduce</b>
+ <b>reduce function</b>
  
 	function(previous, current) {
         	var count = 0;
