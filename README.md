@@ -40,6 +40,28 @@ writes the results in the collection "output" </br>
 <h3>TagsCounter</h3>
 The tags counter is initialized and executed in a similar manner.  
 
+<b>map</b>
+
+	function() {
+        	for (index in this.tags) {
+        		var tag = this.tags[index]; 
+        		var tmp = \"=\";
+        		if(tag.length<20 && tag.indexOf(tmp) == -1) {
+        			emit(tag.toLowerCase(), 1);
+        		}
+        	}
+        }
+ 
+ <b>reduce</b>
+ 
+	function(previous, current) {
+        	var count = 0;
+        	for (index in current) {
+        		count += current[index];
+        	}
+        	return count;
+        }
+        		
 <h3>DomainsCounter</h3>
 
 
