@@ -5,10 +5,11 @@ Contains a set of analysis processes on streams of incoming media items.
 
 Counters
 ---------------
-##### package eu.socialsensor.framework.multimedia.counters ##### 
+<p> Counters is a set of services that executed periodically by extending the class TimeTask of Java. In the package #####eu.socialsensor.framework.multimedia.counters##### there are four counters for counting contributors, domains, tags and items. 
 
+</p>
 ##### ContributorsCounter #####
-
+ContributorsCounter is based on the MapReduce operation of mongodb and counts the number of unique contributors (users) per timeslot.  
 
 
 
