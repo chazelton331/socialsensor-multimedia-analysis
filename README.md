@@ -32,7 +32,7 @@ The service executes the following map/reduce job every 30 minutes.
         	for (index in current) {
         		count += current[index];
         	}
-         return count;
+        	return count;
         }
         		
 <h3>TagsCounter</h3>
