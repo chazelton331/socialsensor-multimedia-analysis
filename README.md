@@ -19,11 +19,22 @@ To initialize and execute contributors counter every 30 minutes run the followin
 
 The service executes the following map/reduce job every 30 minutes. 
 <b>map</b>
-      function() { 
-	      var k = {stream:this.streamId, author:this.author}; 
-            emit(k, 1);
+
+      function() {
+      	var k = {stream:this.streamId, author:this.author}; 
+    	emit(k, 1);
       }
       
+<b>reduce</b>    
+
+	function(previous, current) {  
+        	var count = 0;
+        	for (index in current) {
+        		count += current[index];
+        	}
+         return count;
+        }
+        		
 <h3>TagsCounter</h3>
 
 
