@@ -68,7 +68,7 @@ The domains counter is initialized and executed in a similar manner.
 
 <h2>Geospatial Analysis</h2> 
 
-The package <b>eu.socialsensor.framework.multimedia.spatial</b> contains a set of classes for the periodic clustering of media items based on their spatial proximity. The proximity of media items is based om the Vincenty geiodesic distance between two geo-points. The used clustering algorithm is BIRCH. 
+The package <b>eu.socialsensor.framework.multimedia.spatial</b> contains a set of classes for the periodic clustering of geo-tagged media items based on their spatial proximity. The proximity of media items is based om the Vincenty geiodesic distance between two geo-points. The used clustering algorithm is BIRCH. 
 The resulted clusters indexed in a solr collection.  
 
 To initialize and execute birch clustering:
@@ -83,12 +83,20 @@ To initialize and execute birch clustering:
 		0, 
 		15*60*1000
 	);
-					
+	
+
+<h2>Visual Analysis</h2> 
+
+The package <b>eu.socialsensor.framework.multimedia.visual</b> contains a set of classes for the periodic clustering of media items based on their visual similarity. The visual similarity of media items is based on a combination of SURF descriptors aggregated with the VLAD scheme. For the clustering, SCAN graph clustering algorithm is used.  
+
 Additional information
 ------------------------
 ###Project dependencies###
 The computational-verification project is dependent on two SocialSensor projects:
 * [Socialsensor-framework-common](https://github.com/socialsensor/socialsensor-framework-common) : This project contains main classes and interfaces to be used by other SocialSensor projects.
+* [Socialsensor-framework-client](https://github.com/socialsensor/socialsensor-framework-client) : The project contains a set of convenience methods on top of common data repositories.
+* [multimedia-indexing](https://github.com/socialsensor/socialsensor-multimedia-analysis) : A framework for large-scale feature extraction, indexing and retrieval.
+
 
 ###Contact information###
 For further details, contact Symeon Papadopoulos (papadop@iti.gr) or Manos Schinas (manosetro@iti.gr).
