@@ -51,20 +51,18 @@ The tags counter is initialized and executed in a similar manner.
         		}
         	}
         }
- 
- <b>reduce function</b>
- 
-	function(previous, current) {
-        	var count = 0;
-        	for (index in current) {
-        		count += current[index];
-        	}
-        	return count;
-        }
+
         		
 <h3>DomainsCounter</h3>
+The domains counter is initialized and executed in a similar manner.
 
+<b>map function</b>
 
+	function() {
+		var domain = this.url.match(/:\\/\\/(.[^/]+)/)[1];
+		emit(domain, 1);
+        }
+        	
 <h3>ItemsCounter</h3>
 
 
