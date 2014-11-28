@@ -13,11 +13,12 @@ ContributorsCounter is based on the MapReduce operation of mongodb and counts th
 
 To initialize and execute contributors counter every 30 minutes run the following code:
 
-      ContributorsCounter counter = new ContributorsCounter("hostname", "dbname", "collection");
+      ContributorsCounter counter = new ContributorsCounter("hostname", "dbname", "collection", "output");
       Timer call = new Timer();
       call.scheduleAtFixedRate(counter, 0, 30*60*1000);
 
-The service executes the following map/reduce job every 30 minutes. 
+The service submit the the following map/reduce javascript functions and mongodb engine executes them and 
+writes the results in the collction "output" </br>
 <b>map</b>
 
       function() {
@@ -36,7 +37,7 @@ The service executes the following map/reduce job every 30 minutes.
         }
         		
 <h3>TagsCounter</h3>
-
+In  similar manner is initialized and executed the tags counter. 
 
 <h3>DomainsCounter</h3>
 
